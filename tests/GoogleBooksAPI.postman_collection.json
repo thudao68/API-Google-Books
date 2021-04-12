@@ -6,65 +6,6 @@
 	},
 	"item": [
 		{
-			"name": "LIST Books with filter",
-			"event": [
-				{
-					"listen": "test",
-					"script": {
-						"exec": [
-							"pm.test(\"Status test\", function () {\r",
-							"    pm.response.to.have.status(200);\r",
-							"});\r",
-							"let responseJson = pm.response.json()\r",
-							"pm.test(\"response for filter\", function () {\r",
-							"    for (let i = 0; i < responseJson.items.length; i++) {\r",
-							"        if (pm.collectionVariables.get(\"filter\") === \"full\") {\r",
-							"            (pm.expect(responseJson.items[i].accessInfo.viewability).to.equal(\"ALL_PAGES\"));\r",
-							"        } if (pm.collectionVariables.get(\"filter\") === \"paid-ebooks\") {\r",
-							"            (pm.expect(responseJson.items[i].saleInfo.listPrice).to.be.a('Object'));\r",
-							"        } if (pm.collectionVariables.get(\"filter\") === \"ebooks\") {\r",
-							"            (pm.expect(responseJson.items[i].saleInfo.isEbook).to.equal(true));\r",
-							"        }\r",
-							"    }\r",
-							"});\r",
-							""
-						],
-						"type": "text/javascript"
-					}
-				}
-			],
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "https://www.googleapis.com/books/v1/volumes?q={{searchTerms}}&filter={{filter}}",
-					"protocol": "https",
-					"host": [
-						"www",
-						"googleapis",
-						"com"
-					],
-					"path": [
-						"books",
-						"v1",
-						"volumes"
-					],
-					"query": [
-						{
-							"key": "q",
-							"value": "{{searchTerms}}"
-						},
-						{
-							"key": "filter",
-							"value": "{{filter}}"
-						}
-					]
-				},
-				"description": "Scenario 1.1: \"filter\" est \"ebooks\"\n    Etant donné que j'ai le URL et la route vers un correct mot clé \"searchTerms\"\n    Quand j'ajoute le paramètre \"filter\" = \"ebooks\"\n    Alors le résultat s'affiche les livres liés au mot clé et existants sous format ebook (leur info items[i].saleInfo.isEbook est 'true')\n\nScenario 1.2: \"filter\" est \"paid-ebooks\"\n    Etant donné que j'ai le URL et la route vers un correct \"searchTerms\"\n    Quand j'ajoute le paramètre \"filter\" = \"paid-ebooks\"\n    Alors le résultat s'affiche les livres liés au mot clé et payants (leur info items.saleInfo.listPrice est existant)\n\nScenario 1.3: \"filter\" est \"full\"\n    Etant donné que j'ai le URL et la route vers un correct \"searchTerms\"\n    Quand j'ajoute le paramètre \"filter\" = \"full\"\n    Alors le résultat s'affiche les livres liés au mot clé et tout leur text est accessible (leur info items.accessInfo.viewability est \"ALL_PAGES\")"
-			},
-			"response": []
-		},
-		{
 			"name": "LIST Books with maxResults",
 			"event": [
 				{
@@ -250,27 +191,27 @@
 	],
 	"variable": [
 		{
-			"id": "48b00a88-f5bd-4df5-b0e6-f9e442341853",
+			"id": "b2d71e19-a394-449f-b029-d17398799309",
 			"key": "maxResults",
 			"value": "4"
 		},
 		{
-			"id": "a31e3f3f-1d0c-4100-9e23-32fd4a7e29ad",
+			"id": "f654c19b-3c37-49c7-9712-d95af837f546",
 			"key": "searchTerms",
 			"value": "postman"
 		},
 		{
-			"id": "f97c584b-26d3-49ec-af47-fa2cfa5348a4",
+			"id": "39605b9c-8f9d-433a-a585-355ab3c61113",
 			"key": "filter",
 			"value": "ebooks"
 		},
 		{
-			"id": "26c370e0-fa31-4a39-9f28-7f14c6fce6a1",
+			"id": "de1d85f6-b05a-43d0-8d30-cedc1fe0176b",
 			"key": "filter",
 			"value": ""
 		},
 		{
-			"id": "11002b2e-9258-43ba-9d97-82f7caafc99f",
+			"id": "be5110e1-78f9-487b-ad66-34fedfafb426",
 			"key": "volumeIds",
 			"value": ""
 		}
