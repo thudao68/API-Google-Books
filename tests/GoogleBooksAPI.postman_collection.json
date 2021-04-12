@@ -16,7 +16,7 @@
 							"    pm.response.to.have.status(200);\r",
 							"});\r",
 							"let responseJson = pm.response.json()\r",
-							"pm.test(`response for ${data.filter}`, function () {\r",
+							"pm.test(\"response for filter\", function () {\r",
 							"    for (let i = 0; i < responseJson.items.length; i++) {\r",
 							"        if (pm.collectionVariables.get(\"filter\") === \"full\") {\r",
 							"            (pm.expect(responseJson.items[i].accessInfo.viewability).to.equal(\"ALL_PAGES\"));\r",
@@ -248,27 +248,27 @@
 	],
 	"variable": [
 		{
-			"id": "21800d30-c485-4e94-9f73-d4441ea79ecf",
+			"id": "6f554080-1d95-4b2d-ae03-2a9bb415619d",
 			"key": "maxResults",
 			"value": "4"
 		},
 		{
-			"id": "00fd79e9-48df-4e4d-9b14-c78bf71594af",
+			"id": "b7e7350f-bc40-4a0e-adbc-145f3e411265",
 			"key": "searchTerms",
 			"value": "postman"
 		},
 		{
-			"id": "5d941ecd-b8c1-4c86-9632-5a4ad6112804",
+			"id": "94a588c1-375f-497a-b8bf-e4901100338a",
 			"key": "filter",
 			"value": "ebooks"
 		},
 		{
-			"id": "dd7f6c1b-3164-4f46-ac6e-6d69d2d4ab4e",
+			"id": "4cef32cc-67ad-469a-8163-845e9a8637ad",
 			"key": "filter",
 			"value": ""
 		},
 		{
-			"id": "e4bf0204-ddd3-41ad-93d4-fa1ec1f753bb",
+			"id": "f039993a-dfef-46a7-80cd-d7b490d9542d",
 			"key": "volumeIds",
 			"value": ""
 		}
