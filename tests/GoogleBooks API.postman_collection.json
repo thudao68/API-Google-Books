@@ -1,0 +1,276 @@
+{
+	"info": {
+		"_postman_id": "91ed52a4-d4d8-41ff-ad37-996dbbdee859",
+		"name": "GoogleBooks API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "LIST Books with filter",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status test\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"let responseJson = pm.response.json()\r",
+							"pm.test(`response for ${data.filter}`, function () {\r",
+							"    for (let i = 0; i < responseJson.items.length; i++) {\r",
+							"        if (pm.collectionVariables.get(\"filter\") === \"full\") {\r",
+							"            (pm.expect(responseJson.items[i].accessInfo.viewability).to.equal(\"ALL_PAGES\"));\r",
+							"        } if (pm.collectionVariables.get(\"filter\") === \"paid-ebooks\") {\r",
+							"            (pm.expect(responseJson.items[i].saleInfo.listPrice).to.be.a('Object'));\r",
+							"        } if (pm.collectionVariables.get(\"filter\") === \"ebooks\") {\r",
+							"            (pm.expect(responseJson.items[i].saleInfo.isEbook).to.equal(true));\r",
+							"        }\r",
+							"    }\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://www.googleapis.com/books/v1/volumes?q={{searchTerms}}&filter={{filter}}",
+					"protocol": "https",
+					"host": [
+						"www",
+						"googleapis",
+						"com"
+					],
+					"path": [
+						"books",
+						"v1",
+						"volumes"
+					],
+					"query": [
+						{
+							"key": "q",
+							"value": "{{searchTerms}}"
+						},
+						{
+							"key": "filter",
+							"value": "{{filter}}"
+						}
+					]
+				},
+				"description": "Scenario 1.1: \"filter\" est \"ebooks\"\n    Etant donné que j'ai le URL et la route vers un correct mot clé \"searchTerms\"\n    Quand j'ajoute le paramètre \"filter\" = \"ebooks\"\n    Alors le résultat s'affiche les livres liés au mot clé et existants sous format ebook (leur info items[i].saleInfo.isEbook est 'true')\n\nScenario 1.2: \"filter\" est \"paid-ebooks\"\n    Etant donné que j'ai le URL et la route vers un correct \"searchTerms\"\n    Quand j'ajoute le paramètre \"filter\" = \"paid-ebooks\"\n    Alors le résultat s'affiche les livres liés au mot clé et payants (leur info items.saleInfo.listPrice est existant)\n\nScenario 1.3: \"filter\" est \"full\"\n    Etant donné que j'ai le URL et la route vers un correct \"searchTerms\"\n    Quand j'ajoute le paramètre \"filter\" = \"full\"\n    Alors le résultat s'affiche les livres liés au mot clé et tout leur text est accessible (leur info items.accessInfo.viewability est \"ALL_PAGES\")"
+			},
+			"response": []
+		},
+		{
+			"name": "LIST Books with maxResults",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"let response = pm.response\r",
+							"console.log(response)\r",
+							"let volumeIds = []\r",
+							"\r",
+							"let responseJson = pm.response.json()\r",
+							"pm.test(\"response for correct searchTerms\", function () {\r",
+							"    pm.expect(responseJson.totalItems).to.be.a('number')\r",
+							"});\r",
+							"\r",
+							"pm.test(\"response for correct maxResults\", function () {\r",
+							"    if (0 < data.maxResults < 40) {\r",
+							"        pm.expect(responseJson.items).to.have.length(data.maxResults);\r",
+							"    } \r",
+							"});\r",
+							"\r",
+							"let items = response.json().items\r",
+							"items.forEach( item => {\r",
+							"    volumeIds.push(item.id)\r",
+							"})\r",
+							"pm.collectionVariables.set(\"volumeIds\", volumeIds);\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "apikey",
+					"apikey": [
+						{
+							"key": "in",
+							"value": "query",
+							"type": "string"
+						},
+						{
+							"key": "value",
+							"value": "AIzaSyDoFpT9DAm3UiEpsrefKQXYeYPybVWx1Ik",
+							"type": "string"
+						},
+						{
+							"key": "key",
+							"value": "key",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://www.googleapis.com/books/v1/volumes?q={{searchTerms}}&maxResults={{maxResults}}",
+					"protocol": "https",
+					"host": [
+						"www",
+						"googleapis",
+						"com"
+					],
+					"path": [
+						"books",
+						"v1",
+						"volumes"
+					],
+					"query": [
+						{
+							"key": "q",
+							"value": "{{searchTerms}}"
+						},
+						{
+							"key": "maxResults",
+							"value": "{{maxResults}}"
+						}
+					]
+				},
+				"description": "Scenario 2.1: réponse au correct mot clé \"searchTerms\"\n    Etant donné que j'ai le URL \n    Quand j'ajoute la route vers un correct mot clé \"searchTerms\"\n    Alors le résultat s'affiche les livres liés au mot clé (l'info totalItems est un chiffre)\n\nScenario 2.2: réponse au correct \"maxResults\"\n    Etant donné que j'ai le URL et la route vers un correct mot clé \"searchTerms\"\n    Quand j'ajoute le paramètre \"maxResults\" dans la limite de 1 à 40\n    Alors le résultat s'affiche le nombre désigné des livres"
+			},
+			"response": []
+		},
+		{
+			"name": "GET Book by volumeId",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"let volumeIds = pm.collectionVariables.get('volumeIds')\r",
+							"\r",
+							"pm.variables.set('volumeId', volumeIds[0])\r",
+							"volumeIds.shift()\r",
+							"\r",
+							"pm.collectionVariables.set('volumeIds', volumeIds)\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"let responseJson = pm.response.json()\r",
+							"let volumeIds = pm.collectionVariables.get('volumeIds')\r",
+							"\r",
+							"if( volumeIds.length > 0) {\r",
+							"    postman.setNextRequest('GET Book by VolumeId')\r",
+							"} else {\r",
+							"    pm.collectionVariables.unset('volumeIds')\r",
+							"    postman.setNextRequest(null)\r",
+							"}\r",
+							"\r",
+							"pm.test(\"response for volumeId\", function () {\r",
+							"    pm.expect(responseJson.id).to.be.a('string')\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://www.googleapis.com/books/v1/volumes/:volumeId",
+					"protocol": "https",
+					"host": [
+						"www",
+						"googleapis",
+						"com"
+					],
+					"path": [
+						"books",
+						"v1",
+						"volumes",
+						":volumeId"
+					],
+					"variable": [
+						{
+							"key": "volumeId",
+							"value": "{{volumeId}}"
+						}
+					]
+				},
+				"description": "Scenario: réponse au correct \"volumeId\" \n        Etant donné que j'ai le URL et le tableau stocké des \"volumeId\" dans la requête \"LIST Books with maxResults\"\n        Quand je fait rouler les \"volumeId\" respectivement\n        Alors le résultat s'affiche le livre avec le \"volumeId\""
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"id": "2a1b6874-3697-4dd8-8584-438d643fb2a2",
+			"key": "maxResults",
+			"value": "4"
+		},
+		{
+			"id": "983c1c92-51eb-4986-834f-6a067f512b20",
+			"key": "searchTerms",
+			"value": "postman"
+		},
+		{
+			"id": "3c22b64e-1129-45cb-b39c-89de96c54f4f",
+			"key": "filter",
+			"value": "ebooks"
+		},
+		{
+			"id": "e9ae2401-fa70-422c-8c9d-0bd2fb1bc3ef",
+			"key": "filter",
+			"value": ""
+		},
+		{
+			"id": "753f1ceb-4e17-4460-a977-92686bce7d64",
+			"key": "volumeIds",
+			"value": ""
+		}
+	]
+}
